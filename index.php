@@ -74,14 +74,14 @@
 		{
 			$('.flickr-pagination li').removeClass('active');
 			if(this.page>1) $('.flickr-pagination li').eq(0).addClass('active');
-			if(this.page < Math.floor((rsp.photos.photo.length-1)/20)) $('.flickr-pagination li').eq(1).addClass('active');
+			if(this.page < Math.ceil(rsp.photos.photo.length/20)) $('.flickr-pagination li').eq(1).addClass('active');
 			$('#flickr ul').removeClass('active');
 			$('#tab-'+this.page).addClass('active');
 		},
 		goToPage:function()
 		{
 			var i = parseInt($('#textSearch').val());
-			if(i>0 && i<= Math.floor((rsp.photos.photo.length-1)/20)){ this.page = i; this.goPage(); }else{  alert('Wrong Page'); }
+			if(i>0 && i<= Math.ceil(rsp.photos.photo.length/20)){ this.page = i; this.goPage(); }else{  alert('Wrong Page'); }
 		},
 		previousPage:function()
 		{
@@ -166,7 +166,7 @@
 					ul.appendTo('#flickr');
 					ul = $("<ul/>",{
 						class:'flickr-ul',
-						id:'tab-'+ (parseInt(i/20)+1)
+						id:'tab-'+ (Math.ceil(i/20)+1)
 					});
 				}
 				
@@ -196,7 +196,7 @@
 			}
 			
 			$('<span>',{
-				html:'Showing page 1 of '+ parseInt((rsp.photos.photo.length-1)/20),
+				html:'Showing page 1 of '+ parseInt(rsp.photos.photo.length/20),
 				id:'page-text'			
 			}).appendTo('#flickr');;
 			$('<br/>').appendTo('#flickr');			
