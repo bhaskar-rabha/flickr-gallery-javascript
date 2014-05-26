@@ -42,14 +42,14 @@
 			$('#overlay').remove();
 		},
 		previousPhoto:function(idx)
-		{
-			var idx = parseInt(idx) - 1;
-			this.showPhoto(idx);
+		{			
+			var i = parseInt(idx) - 1;
+			this.showPhoto(i-1);
 		},
 		showPhoto:function(idx)
 		{
-			var rel = $('.li-img-flickr').eq(idx).find('img').attr('rel');
-			var index = $('.li-img-flickr').eq(idx).find('img').attr('dataindex');
+			var rel = $('#tab-'+ this.page).find('.li-img-flickr').eq(idx).find('img').attr('rel');
+			var index = $('#tab-'+ this.page).find('.li-img-flickr').eq(idx).find('img').attr('dataindex');
 			$('#overlay').remove();
 			var overlay = $('<div id="overlay"><div id="popupImg"></div></div>');
  				overlay.appendTo(document.body) 
@@ -58,7 +58,7 @@
 				
 				html +='</a></span></div><div style="float:left"><img  src="'+ rel + '" /></div><div class="arrow" style="float:left;height:100%"><span style="color:#ff"><a href="javascript:flickr.nextPhoto(\''+ index +'\');">';				
 				
-				if(idx < parseInt($('.li-img-flickr').length-1)) html +='<img src="assets/images/Actions-arrow-right-icon.png"/>';				
+				if(idx < parseInt($('#tab-'+ this.page).find('.li-img-flickr').length-1)) html +='<img src="assets/images/Actions-arrow-right-icon.png"/>';				
 				
 				html +='</a></span></div>';
 				
@@ -66,8 +66,8 @@
 		},
 		nextPhoto:function(idx)
 		{
-			var idx = parseInt(idx) + 1;
-			this.showPhoto(idx);
+			var i = parseInt(idx) + 1;
+			this.showPhoto(i-1);
 		
 		},
 		goPage:function()
@@ -145,7 +145,7 @@
 							{ 
 								width:'150px',
 								rel:n_url,
-								dataindex: i	
+								dataindex: liCount-1	
 							}).attr( "src", t_url)	
 						}),						
 					class:"li-img-flickr"
