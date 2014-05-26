@@ -122,7 +122,7 @@
 		    var s = "";
 		 	var html = '';
  			var ul = $("<ul/>",{
- 				class:'flickr-ul active',
+ 				'class':'flickr-ul active',
 				id:'tab-1'
  			});
 		    var liCount = 1;
@@ -141,20 +141,22 @@
 		    	var li = $("<li/>",{
 					html:$( "<a>", 
 						{ 
+							href:'javasript:void(0);',	
 							html:$( "<img>", 
 							{ 
 								width:'150px',
 								rel:n_url,
 								dataindex: liCount-1	
-							}).attr( "src", t_url)	
+							}).attr( "src", t_url)
+
 						}),						
-					class:"li-img-flickr"
+					'class':"li-img-flickr"
 				})
 				var div = $( "<div>", 
 				{ 
 					html:$("<a>",{
 					html:'Download original',
-					class:'pic-download'
+					'class':'pic-download'
 					}
 					).attr('href',d_url)					
 				}).appendTo(li);
@@ -165,7 +167,7 @@
 					liCount = 1;
 					ul.appendTo('#flickr');
 					ul = $("<ul/>",{
-						class:'flickr-ul',
+						'class':'flickr-ul',
 						id:'tab-'+ (Math.ceil(i/20)+1)
 					});
 				}
@@ -173,7 +175,7 @@
 		    }
 			if((flickr.perPage%20) != 0) ul.appendTo('#flickr');
 			var ulPagination = $("<ul/>",{
- 				class:'flickr-pagination'				
+ 				'class':'flickr-pagination'				
  			});
 			
 			if(parseInt(rsp.photos.photo.length/20)>1)
@@ -183,14 +185,14 @@
 							{									
 								html: ' <-Previous Page '	
 							}).attr( "href", 'javascript:flickr.previousPage()'),
-							class:"page"
+							'class':"page"
 						}).appendTo(ulPagination);
 					liPage = $("<li/>",{
 							html: $( "<a>", 
 							{									
 								html: 'Next Page-> '	
 							}).attr( "href", 'javascript:flickr.nextPage()'),
-							class:"page active"
+							'class':"page active"
 						}).appendTo(ulPagination);
 					ulPagination.appendTo('#flickr');	
 			}
