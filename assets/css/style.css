@@ -1,5 +1,5 @@
-body{font-family:arial;}
-#wrapper{ width:600px;}
+body{margin:0px;font-family:arial;}
+#wrapper{ width:600px;margin-left: auto;margin-right: auto;}
 .flickr-ul{list-style: none; display:none;}
 .flickr-ul.active{display:block;}
 .li-img-flickr{ float: left;height: 111px;margin-top: 15px;overflow: hidden;width: 25%;position: relative;}
