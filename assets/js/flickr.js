@@ -1,11 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <title>Flickr JSON</title>
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-   <script>
-	var flickr = {
+var flickr = {
  		selector:'#flickr',
  		apiKey:'c48a2139266a0bcf07b8e30b593d2145',
  		tags:'temple',
@@ -212,23 +205,3 @@
  		}
  	};
 
-
-
-
-
-
-	  	$(document).ready(function(){
-	  		flickr.init();
-	  	});
-
-  </script>
-  </head>
-<body>
-	<div id="wrapper">
-		<div id="flickr">				
-		</div>
-	</div>
-
-</body>
-
-</html>
