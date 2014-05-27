@@ -7,9 +7,17 @@ var flickr = {
 		perPage:20,
 		page:1,
 		totalRecord:0,
- 		init:function()
+ 		init:function(config)
  		{
- 			this.apiKey = 'c48a2139266a0bcf07b8e30b593d2145';
+ 			if(typeof config != 'undefined')
+ 			{
+ 				if(typeof config.selector != 'undefined')	{ this.selector = this.selector;	}
+ 				if(typeof config.apiKey != 'undefined')		{ this.apiKey 	= this.apiKey; 		}
+ 				if(typeof config.tags != 'undefined')		{ this.tags 	=  config.tags; 	}
+ 				if(typeof config.tagmode != 'undefined')	{ this.tagmode 	=  config.tagmode; 	}	
+ 				if(typeof config.perPage != 'undefined')	{ this.perPage 	=  config.perPage; 	}	
+ 			}
+ 			
  			this.fetchJSONData();
  			this.bindEvent();		
  		},
@@ -36,8 +44,8 @@ var flickr = {
 			}).done(function(rsp) 
 			{
 			    //console.log(rsp);
-				$('#flickr').html('');
-			    window.rsp = rsp;			    
+				$(self.selector).html('');
+				window.rsp = rsp;			    
 			 	var html = '';
 	 			var ul = $("<ul/>",{
 	 				'class':'flickr-ul active',
@@ -45,41 +53,41 @@ var flickr = {
 	 			});
 				self.totalRecord = rsp.photos.pages;
 				
-			    for (var i=1; i <= rsp.photos.photo.length; i++) 
+				for (var i=1; i <= rsp.photos.photo.length; i++) 
 				{				
 					var photo = rsp.photos.photo[i-1];
-			      	var t_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
-			        photo.server + "/" + photo.id + "_" + photo.secret + "_" + "t.jpg";
+					var t_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
+					photo.server + "/" + photo.id + "_" + photo.secret + "_" + "t.jpg";
 					var n_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
-			        photo.server + "/" + photo.id + "_" + photo.secret +  ".jpg";
+					photo.server + "/" + photo.id + "_" + photo.secret +  ".jpg";
 					var d_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
-			        photo.server + "/" + photo.id + "_" + photo.secret +  "_d.jpg";				
-			      	var p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
-			    	var li = $("<li/>",{
+					photo.server + "/" + photo.id + "_" + photo.secret +  "_d.jpg";				
+					var p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
+					var li = $("<li/>",{
 						html:$( "<a>", 
+						{ 
+							href:'javascript:void(0);',	
+							html:$( "<img>", 
 							{ 
-								href:'javascript:void(0);',	
-								html:$( "<img>", 
-								{ 
-									width:'150px',
-									rel:n_url,
-									dataindex: i	
-								}).attr( "src", t_url)
+								width:'150px',
+								rel:n_url,
+								dataindex: i	
+							}).attr( "src", t_url)
 
-							}),						
+						}),						
 						'class':"li-img-flickr"
 					})
 					var div = $( "<div>", 
 					{ 
 						html:$("<a>",{
-						html:'Download original',
-						'class':'pic-download'
+							html:'Download original',
+							'class':'pic-download'
 						}
-						).attr('href',d_url)					
+					).attr('href',d_url)					
 					}).appendTo(li);
 					li.appendTo(ul);				
-			    }
-				ul.appendTo('#flickr');
+				}
+				ul.appendTo(self.selector);
 				
 				var ulPagination = $("<ul/>",{
 	 				'class':'flickr-pagination'				
@@ -102,23 +110,21 @@ var flickr = {
 								}).attr( "href", 'javascript:flickr.nextPage()'),
 								'class':"page active"
 							}).appendTo(ulPagination);
-						ulPagination.appendTo('#flickr');	
+						ulPagination.appendTo(self.selector);	
 				}
 				
 				$('<span>',{
 					html:'Showing page '+ self.page +' of '+ self.totalRecord,
 					id:'page-text'			
-				}).appendTo('#flickr');;
-				$('<br/>').appendTo('#flickr');			
+				}).appendTo(self.selector);;
+				$('<br/>').appendTo(self.selector);			
 				$('<span>',{
 					html:'Go to page ',
 					id:"search-label"
-				}).appendTo('#flickr');		
+				}).appendTo(self.selector);		
 				
-				$('#flickr').append('<input type="text" size="10" id="textSearch" name="search" value="'+ self.page +'"/> <a id="btnGo" href="javascript:flickr.goToPage()">Go</a>');
-				
-				
-			    self.bindEvent();
+				$(self.selector).append('<input type="text" size="10" id="textSearch" name="search" value="'+ self.page +'"/> <a id="btnGo" href="javascript:flickr.goToPage()">Go</a>');
+		    	self.bindEvent();
 			})
 
  		},
