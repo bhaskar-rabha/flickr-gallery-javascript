@@ -35,32 +35,33 @@
 					api_key:this.apiKey,
 					jsoncallback:'?',
 					extras:'url_m',
-					nojsoncallback:1
+					nojsoncallback:1,
+					per_page:self.perPage,
+					page:this.page
 				}		
 
 			}).done(function(rsp) 
 			{
 			    //console.log(rsp);
-			    window.rsp = rsp;
-			    var s = "";
+				$('#flickr').html('');
+			    window.rsp = rsp;			    
 			 	var html = '';
 	 			var ul = $("<ul/>",{
 	 				'class':'flickr-ul active',
-					id:'tab-1'
+					id:'tab'
 	 			});
-			    var liCount = 1;			   
-				self.totalRecord = rsp.photos.photo.length;
-			    for (var i=0; i < self.totalRecord; i++) 
-				{		      	
-					liCount++;
-					photo = rsp.photos.photo[i];
-			      	t_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
+				self.totalRecord = rsp.photos.pages;
+				
+			    for (var i=1; i <= rsp.photos.photo.length; i++) 
+				{				
+					var photo = rsp.photos.photo[i-1];
+			      	var t_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
 			        photo.server + "/" + photo.id + "_" + photo.secret + "_" + "t.jpg";
-					n_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
+					var n_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
 			        photo.server + "/" + photo.id + "_" + photo.secret +  ".jpg";
-					d_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
+					var d_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
 			        photo.server + "/" + photo.id + "_" + photo.secret +  "_d.jpg";				
-			      	p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
+			      	var p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
 			    	var li = $("<li/>",{
 						html:$( "<a>", 
 							{ 
@@ -69,7 +70,7 @@
 								{ 
 									width:'150px',
 									rel:n_url,
-									dataindex: liCount-1	
+									dataindex: i	
 								}).attr( "src", t_url)
 
 							}),						
@@ -83,32 +84,23 @@
 						}
 						).attr('href',d_url)					
 					}).appendTo(li);
-					li.appendTo(ul);			
-					
-					if(liCount > self.perPage)
-					{
-						liCount = 1;
-						ul.appendTo('#flickr');
-						ul = $("<ul/>",{
-							'class':'flickr-ul',
-							id:'tab-'+ (Math.ceil(i/self.perPage)+1)
-						});
-					}
-					
+					li.appendTo(ul);				
 			    }
-				if((flickr.perPage%self.perPage) != 0) ul.appendTo('#flickr');
+				ul.appendTo('#flickr');
+				
 				var ulPagination = $("<ul/>",{
 	 				'class':'flickr-pagination'				
 	 			});
 				
-				if(parseInt(rsp.photos.photo.length/self.perPage)>1)
+				if(parseInt(self.totalRecord)>1)
 				{
+					var active = (self.page > 1)?' active':'';
 					var liPage = $("<li/>",{
 								html: $( "<a>", 
 								{									
 									html: ' <-Previous Page '	
 								}).attr( "href", 'javascript:flickr.previousPage()'),
-								'class':"page"
+								'class':"page" + active
 							}).appendTo(ulPagination);
 						liPage = $("<li/>",{
 								html: $( "<a>", 
@@ -121,7 +113,7 @@
 				}
 				
 				$('<span>',{
-					html:'Showing page 1 of '+ parseInt(rsp.photos.photo.length/self.perPage),
+					html:'Showing page '+ self.page +' of '+ self.totalRecord,
 					id:'page-text'			
 				}).appendTo('#flickr');;
 				$('<br/>').appendTo('#flickr');			
@@ -149,21 +141,21 @@
 		showPhoto:function(idx)
 		{
 			
-			var rel = $('#tab-'+ this.page).find('.li-img-flickr').eq(idx).find('img').attr('rel');
-			var index = $('#tab-'+ this.page).find('.li-img-flickr').eq(idx).find('img').attr('dataindex');
+			var rel = $('.li-img-flickr').eq(idx).find('img').attr('rel');
+			var index = $('.li-img-flickr').eq(idx).find('img').attr('dataindex');
 			$('#overlay').remove();
 			var overlay = $('<div id="overlay"><div id="popupImg"></div></div>');
- 				overlay.appendTo(document.body) 
-				var html = '<div style="width:100%;text-align:right"><a href="javascript:flickr.closeButton(this);"><img src="assets/images/Close-2-icon.png"/></a></div><div class="arrow" style="float:left;height:100%"><span style="color:#ff;float:left"><a href="javascript:flickr.previousPhoto(\''+ index +'\');">';
-				if(idx >= 1) html +='<img src="assets/images/Actions-arrow-left-icon.png"/>';
-				
-				html +='</a></span></div><div style="float:left"><img  src="'+ rel + '" /></div><div class="arrow" style="float:left;height:100%"><span style="color:#ff"><a href="javascript:flickr.nextPhoto(\''+ index +'\');">';				
-				
-				if(idx < parseInt($('#tab-'+ this.page).find('.li-img-flickr').length-1)) html +='<img src="assets/images/Actions-arrow-right-icon.png"/>';				
-				
-				html +='</a></span></div>';
-				
- 				$('#popupImg').html(html);
+			overlay.appendTo(document.body) 
+			var html = '<div style="width:100%;text-align:right"><a href="javascript:flickr.closeButton(this);"><img src="assets/images/Close-2-icon.png"/></a></div><div class="arrow" style="float:left;height:100%"><span style="color:#ff;float:left"><a href="javascript:flickr.previousPhoto(\''+ index +'\');">';
+			if(index > 1) html +='<img src="assets/images/Actions-arrow-left-icon.png"/>';
+			
+			html +='</a></span></div><div style="float:left"><img  src="'+ rel + '" /></div><div class="arrow" style="float:left;height:100%"><span style="color:#ff"><a href="javascript:flickr.nextPhoto(\''+ index +'\');">';				
+			
+			if(index < this.perPage) html +='<img src="assets/images/Actions-arrow-right-icon.png"/>';				
+			
+			html +='</a></span></div>';
+			
+			$('#popupImg').html(html);
 		},
 		nextPhoto:function(idx)
 		{
@@ -173,17 +165,17 @@
 		},
 		goPage:function()
 		{
-			$('#page-text').text('Showing page '+ this.page + ' of '+ parseInt(this.totalRecord/this.perPage));
+			this.fetchJSONData();
+			$('#page-text').text('Showing page '+ this.page + ' of '+ this.totalRecord);
 			$('.flickr-pagination li').removeClass('active');
-			if(this.page>1) $('.flickr-pagination li').eq(0).addClass('active');
-			if(this.page < Math.ceil(rsp.photos.photo.length/this.perPage)) $('.flickr-pagination li').eq(1).addClass('active');
-			$('#flickr ul').removeClass('active');
-			$('#tab-'+this.page).addClass('active');
+			if(this.page > 1) $('.flickr-pagination li').eq(0).addClass('active');
+			if(this.page < this.totalRecord) $('.flickr-pagination li').eq(1).addClass('active');
+			
 		},
 		goToPage:function()
 		{
 			var i = parseInt($('#textSearch').val());
-			if(i>0 && i<= Math.ceil(rsp.photos.photo.length/this.perPage)){ this.page = i; this.goPage(); }else{  alert('Wrong Page'); }
+			if(i>0 && i<= this.totalRecord){ this.page = i; this.goPage(); }else{  alert('Wrong Page'); }
 		},
 		previousPage:function()
 		{
