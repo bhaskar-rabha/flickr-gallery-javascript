@@ -42,8 +42,7 @@ var flickr = {
 				}		
 
 			}).done(function(rsp) 
-			{
-			    //console.log(rsp);
+			{			   
 				$(self.selector).html('');
 				window.rsp = rsp;			    
 			 	var html = '';
@@ -104,7 +103,7 @@ var flickr = {
 								'class':"page" + active
 							}).appendTo(ulPagination);
 						liPage = $("<li/>",{
-								html: $( "<a>", 
+								html: $( "<a/>", 
 								{									
 									html: 'Next Page-> '	
 								}).attr( "href", 'javascript:flickr.nextPage()'),
@@ -113,17 +112,29 @@ var flickr = {
 						ulPagination.appendTo(self.selector);	
 				}
 				
-				$('<span>',{
+				$('<span/>',{
 					html:'Showing page '+ self.page +' of '+ self.totalRecord,
 					id:'page-text'			
 				}).appendTo(self.selector);;
 				$('<br/>').appendTo(self.selector);			
-				$('<span>',{
+				$('<span/>',{
 					html:'Go to page ',
 					id:"search-label"
 				}).appendTo(self.selector);		
 				
-				$(self.selector).append('<input type="text" size="10" id="textSearch" name="search" value="'+ self.page +'"/> <a id="btnGo" href="javascript:flickr.goToPage()">Go</a>');
+				var inputTxt = $("<input/>",{					
+					type:'text',
+					id:'textSearch',
+					name:'search',
+					value:self.page
+				}).attr('size',10).appendTo(self.selector);
+
+				var aBtnGo = $("<a/>",{
+					id:'btnGo',
+					href:'javascript:flickr.goToPage()',
+					html:'Go'
+				}).appendTo(self.selector);				
+
 		    	self.bindEvent();
 			})
 
