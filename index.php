@@ -122,7 +122,7 @@
 					id:"search-label"
 				}).appendTo('#flickr');		
 				
-				$('#flickr').append('<input type="text" id="textSearch" name="search" value=""/> <a id="btnGo" href="javascript:flickr.goToPage()">Go</a>');
+				$('#flickr').append('<input type="text" size="10" id="textSearch" name="search" value="'+ self.page +'"/> <a id="btnGo" href="javascript:flickr.goToPage()">Go</a>');
 				
 				
 			    self.bindEvent();
@@ -144,7 +144,7 @@
 			var rel = $('.li-img-flickr').eq(idx).find('img').attr('rel');
 			var index = $('.li-img-flickr').eq(idx).find('img').attr('dataindex');
 			$('#overlay').remove();
-			var overlay = $('<div id="overlay"><div id="popupImg"></div></div>');
+			var overlay = $('<div id="overlay"><div id="popupImg"><img src="assets/images/loading.gif" /></div></div>');
 			overlay.appendTo(document.body) 
 			var html = '<div style="width:100%;text-align:right"><a href="javascript:flickr.closeButton(this);"><img src="assets/images/Close-2-icon.png"/></a></div><div class="arrow" style="float:left;height:100%"><span style="color:#ff;float:left"><a href="javascript:flickr.previousPhoto(\''+ index +'\');">';
 			if(index > 1) html +='<img src="assets/images/Actions-arrow-left-icon.png"/>';
